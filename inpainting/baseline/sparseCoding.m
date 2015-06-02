@@ -21,11 +21,11 @@ Z = zeros(l,n);
 % Loop over all observations in the columns of X
 for nn = 1:n
     x = X(:,nn);
-    r = x;
     m = M(:,nn);
     m = m~=0;
     MM = diag(m);
     z = zeros(l,1);
+    r = MM*x;
     % Initialize the residual with the observation x
     % For the modification with masking make sure that you only take into
     % account the known observations defined by the mask M
@@ -47,7 +47,7 @@ for nn = 1:n
         r = r - (u_d'*r)*u_d;
         % For the inpainting modification make sure that you only consider
         % the known observations defined by the mask M
-        
+        r = MM*r;
     end
     
     % Add the calculated coefficient vector z to the overall matrix Z
