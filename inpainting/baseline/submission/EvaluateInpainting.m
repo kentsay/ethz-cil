@@ -33,8 +33,7 @@ for i = 3:length(dir) % running through the folder
           
     % Call the main inPainting function
     I_rec = inPainting(I_mask, mask);
-    figure;
-    imshow(I_rec);
+    
     % Measure approximation error
     Errors(k) = mean(mean(mean( ((I - I_rec) ).^2)));
     
