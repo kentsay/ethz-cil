@@ -18,17 +18,20 @@ sigma = 0.01; % sigma: residual error stopping criterion, normalized by signal n
 % convert each patch to 1D signal
 X = my_im2col(I, neib);  
 M = my_im2col(mask, neib);  
-    
+[n,m] = size(I);
 % Construct your dictionary
 % If you load your own dictionary U calculated offline you don't have to 
 % add anything here
-% U = buildDictionary(....);  % TO BE FILLED 
+U = buildDictionary(neib*neib);  % TO BE FILLED 
     
 % Do the sparse coding with modified Matching Pursuit
   Z = sparseCoding(U, X, M, sigma, rc_min);
+ 
 
 % You need to do the image reconstruction using the known image information
 % and for the missing pixels use the reconstruction from the sparse coding.
 % The mask will help you to distinguish between these two parts.
-
+[m,n] = size(M);
+X_t = M.*X + (I - M).*(U*Z);
+I_rec = my_col2im(X_t,neib,n);
 % TO BE FILLED

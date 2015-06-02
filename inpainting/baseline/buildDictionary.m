@@ -14,7 +14,7 @@ try
     temp = load('dictionary.mat');
     U = temp.U;
 catch
-    % Input the alternative here
+    U = overDCTdict(dim,2*dim);
 end
 
    

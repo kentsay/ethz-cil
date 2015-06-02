@@ -14,5 +14,21 @@ function X = my_im2col(I, patch)
 % You can write a for-loop to extract the patches one by one and then 
 % transform each patch to an 1D signal sequentially
 % creating matrix X
+[nrows,ncols] = size(I);
+nrow_patch = nrows/patch;
+ncols_patch = ncols/patch;
+d = patch*patch;
+l = nrow_patch*ncols_patch;
+X = zeros(d,l);
+
+counter = 1;
+for i = 1:nrow_patch
+    for j = 1:ncols_patch
+        t1 = I( [patch*(i-1)+1:i*patch], [(j-1)*patch+1:j*patch]);
+        t2 = t1(:);
+        X(:,counter) = t2;
+        counter = counter + 1;
+    end
+end
 
 % TO BE FILLED

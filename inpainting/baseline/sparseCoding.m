@@ -20,24 +20,31 @@ n = size(X,2);
 Z = zeros(l,n);
 % Loop over all observations in the columns of X
 for nn = 1:n
-    
+    x = X(:,nn);
+    r = x;
+    m = M(:,nn);
+    m = m~=0;
+    MM = diag(m);
+    z = zeros(l,1);
     % Initialize the residual with the observation x
     % For the modification with masking make sure that you only take into
     % account the known observations defined by the mask M
     % Initialize z to zero
    
     % TO BE FILLED
-    
-    while (TO BE FILLED)
+    rc_max = max(abs(r'*U));
+    while (norm(r) > sigma*norm(x)) && (rc_max > rc_min)
         
         % TO BE FILLED 
         
-        % Select atom with maximum absolute correlation to the residual       
-        
+        % Select atom with maximum absolute correlation to the residual
         % Update the maximum absolute correlation
-        
+        [rc_max,d] = max(abs(r'*U));
+        %rc_max = max([rc_max;val])
         % Update coefficient vector z and residual z
-        
+        u_d = U(:,d);
+        z(d) = z(d) + u_d'*r;
+        r = r - (u_d'*r)*u_d;
         % For the inpainting modification make sure that you only consider
         % the known observations defined by the mask M
         
