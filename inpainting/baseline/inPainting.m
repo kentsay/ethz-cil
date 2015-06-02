@@ -31,16 +31,17 @@ U = buildDictionary(neib*neib);  % TO BE FILLED
 % You need to do the image reconstruction using the known image information
 % and for the missing pixels use the reconstruction from the sparse coding.
 % The mask will help you to distinguish between these two parts.
-[m,n] = size(M);
-X_hat = zeros(m, n);
-for it = 1:n 
+[m,nmask] = size(M);
+X_hat = zeros(size(M));
+for it = 1:nmask
     dm = diag(M(:,it)~=0);
     x_hat = dm * X(:,it);
     x_hat = x_hat + (eye(size(dm)) - dm) * U*Z(:,it);
     X_hat(:,it) = x_hat;
 end
+X_hat(X_hat<0)=0;
+I_rec = my_col2im(X_hat,neib,n);
 
-yolo = 1
 %X_t = M.*X + (I - M).*(U*Z);
 %I_rec = my_col2im(X_t,neib,n);
 % TO BE FILLED
