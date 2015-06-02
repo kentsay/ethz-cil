@@ -1,2 +1,2 @@
 # Ignore temp matlab files
-.m~
+*.m~
