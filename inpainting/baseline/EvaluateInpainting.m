@@ -2,7 +2,7 @@
 %
 % NOTE Images must be have .png ending and reside in the same folder.
 
-file_list = dir(); 
+file_list = dir('data'); 
 k = 1;
 
 Errors = []; % mean squared errors for each image would be stored here
@@ -10,7 +10,7 @@ Errors = []; % mean squared errors for each image would be stored here
 
 for i = 3:length(dir) % running through the folder
     
-    file_name = file_list(i).name; % get current filename
+    file_name = ['data/' file_list(i).name]; % get current filename
     
     % Only keep the images in the loop
     if (length(file_name) < 5)
