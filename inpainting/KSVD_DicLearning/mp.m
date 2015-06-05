@@ -1,7 +1,5 @@
-function [ Z ] = mp(U, X, sigma, rc_min)
+% function [ Z ] = mp(U, X, sigma, rc_min)
 % Matching Pursuit algorithm
-%   Detailed explanation goes here
-
 
 % Perform sparse coding using a modified matching pursuit tailored to the 
 % inpainting problem with residual stopping criterion.
@@ -9,13 +7,19 @@ function [ Z ] = mp(U, X, sigma, rc_min)
 % INPUT
 % U: (d x l) unit norm atoms
 % X: (d x n) observations
-% M: (d x n) mask denoting which observations are unknown
 % sigma: residual error stopping criterion, normalized by signal norm
 % rc_min: minimal residual correlation before stopping
 %
 % OUTPUT
 % Z: MP coding
 %
+
+I = imread('./data/TomAndJerry_512x512.png');
+X = double(I)/255;
+
+rc_min = 0.01; % rc_min: minimal residual correlation before stopping
+neib = 16; % neib: The patch sizes used in the decomposition of the image
+sigma = 0.01; % sigma: residual error stopping criterion, normalized by signal norm
 
 l = size(U,2);
 n = size(X,2);
@@ -24,9 +28,7 @@ Z = zeros(l,n);
 % Loop over all observations in the columns of X
 for nn = 1:n
     x = X(:,nn);
-    m = M(:,nn);
-    m = m~=0;
-    MM = diag(m);
+    MM = diag(x);
     z = zeros(l,1);
     r = MM*x;
     % Initialize the residual with the observation x
@@ -35,6 +37,8 @@ for nn = 1:n
     % Initialize z to zero
    
     % TO BE FILLED
+    disp(size(r'));
+    disp(size(U));
     rc_max = max(abs(r'*U));
     while (norm(r) > sigma*norm(x)) && (rc_max > rc_min)
         

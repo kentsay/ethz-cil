@@ -9,7 +9,7 @@ k = 1;
 Errors = []; % mean squared errors for each image would be stored here
 
 
-for i = 3:length(dir(strcat(pathstr,'*.png'))) % running through the folder
+for i = 1:length(dir(strcat(pathstr,'*.png'))) % running through the folder
     
     file_name = file_list(i).name; % get current filename
     

@@ -25,6 +25,8 @@ init_mode = 'samples';
 
 %% Initialization of Dictionary
 
+n = size(X,1);
+U = zeros(n,l);
 
 if strcmp(init_mode, 'rand')
     
@@ -36,7 +38,6 @@ elseif strcmp(init_mode, 'samples')
 else
     error('Invalid value for parameter init_mode.')
 end
-
 
 
 Z = zeros(l,n);
@@ -54,3 +55,6 @@ for i=1:iter_num
     U(:,2:end) = U_new(:,2:end);
     
 end
+
+%save matrix U under the filename dictionary.mat
+save('dictionary.mat', U);
