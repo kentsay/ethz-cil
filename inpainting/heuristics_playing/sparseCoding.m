@@ -33,6 +33,7 @@ for nn = 1:n
    
     % TO BE FILLED
     rc_max = max(abs(r'*U));
+    n_it = 0;
     while (norm(r) > sigma*norm(x)) && (rc_max > rc_min)
         
         % TO BE FILLED 
@@ -48,8 +49,12 @@ for nn = 1:n
         % For the inpainting modification make sure that you only consider
         % the known observations defined by the mask M
         r = MM*r;
+        n_it = n_it + 1;
     end
+    its(nn) = n_it;
     
     % Add the calculated coefficient vector z to the overall matrix Z
     Z(:,nn) = z;
 end
+median(its)
+max(its)

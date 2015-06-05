@@ -1,4 +1,4 @@
-function U = buildDictionary(dim)
+function U = buildDictionary(X)
 
 % Builds a dictionary with atoms of specified dimension
 %
@@ -14,7 +14,8 @@ try
     temp = load('dictionary.mat');
     U = temp.U;
 catch
-    U = overDCTdict(dim,dim);
+    U = dictionary_learning(X);
+    save('dictionary.mat')
 end
 
    
