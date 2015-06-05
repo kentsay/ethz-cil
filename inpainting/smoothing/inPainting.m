@@ -11,4 +11,4 @@ function I_rec = inPainting(I, mask)
 
 
 % Reconstruct image using smoothing to fill in pixels
-I_rec = prioritysmoothing(I, mask, 2, 0.8);
+I_rec = prioritysmoothing(I, mask, 1, 0.8);

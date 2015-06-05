@@ -52,7 +52,7 @@ for it = 1:count
         new_value = mean(mean(image_window));
     end
     I_rec(i,j) = new_value;
-    mask(i,j) = 1;
+    inpainted(i,j) = 1;
 end
 
 %% Helper function to get a window of pixels
