@@ -1,6 +1,5 @@
 function I_rec = inPainting(I, mask)
 
-imshow(I);
 % Perform the actual inpainting of the image 
 
 % INPUT
