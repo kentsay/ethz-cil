@@ -1,2 +1,8 @@
 # Ignore temp matlab files
 *.m~
+
+# Ignore submission zip files
+*.zip
+
+# Ignore OSX files
+.DS_Store
