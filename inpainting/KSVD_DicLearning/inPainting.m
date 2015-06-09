@@ -1,48 +1,66 @@
-function I_rec = inPainting(I, mask)
-
-% Perform the actual inpainting of the image 
-
-% INPUT
-% I: (n x n) masked image
-% mask: (n x n) the mask hidding image information
-%
-% OUTPUT
-% I_rec = Reconstructed image 
-
-% Parameters
-rc_min = 0.01; % rc_min: minimal residual correlation before stopping
-neib = 16; % neib: The patch sizes used in the decomposition of the image
-sigma = 0.01; % sigma: residual error stopping criterion, normalized by signal norm
-
-
-% Get patches of size neib x neib from the image and the mask and
-% convert each patch to 1D signal
-X = my_im2col(I, neib);  
-M = my_im2col(mask, neib);  
-[n,m] = size(I);
-% Construct your dictionary
-% If you load your own dictionary U calculated offline you don't have to 
-% add anything here
-U = buildDictionary(neib*neib);  % TO BE FILLED 
-    
-% Do the sparse coding with modified Matching Pursuit
-Z = sparseCoding(U, X, M, sigma, rc_min);
- 
-
-% You need to do the image reconstruction using the known image information
-% and for the missing pixels use the reconstruction from the sparse coding.
-% The mask will help you to distinguish between these two parts.
-[m,nmask] = size(M);
-X_hat = zeros(size(M));
-for it = 1:nmask
-    dm = diag(M(:,it)~=0);
-    x_hat = dm * X(:,it);
-    x_hat = x_hat + (eye(size(dm)) - dm) * U*Z(:,it);
-    X_hat(:,it) = x_hat;
+function R = inPainting(I, M)
+  % Patch size
+  k = 16;
+  
+  % Initialize and split into blocks
+  M = M ~= 0;
+  d = 512 / k;
+  dim = k * ones(1, d);
+  CI = mat2cell(I, dim, dim);
+  CM = mat2cell(M, dim, dim);
+  CR = cell(d, d);
+  
+  % Loop through patches
+  for i = 1:size(CI, 1)
+    for j = 1:size(CI, 2)
+      Ib = CI{i, j};
+      Mb = CM{i, j};
+      if nnz(Mb) == numel(Mb)
+        CR{i, j} = Ib;
+        continue;
+      end
+      F = impute(Ib, Mb);
+      [U, D, V] = svd(F);
+      % Keep a percentage of the total variance
+      c = find(cumsum(diag(D))/sum(diag(D)) > 0.75);
+      k = c(1);
+      CR{i, j} = U(:, 1:k)*D(1:k, 1:k)*V(:, 1:k)';
+      CR{i, j}(Mb) = Ib(Mb);
+    end
+  end
+  R = cell2mat(CR);
 end
-X_hat(X_hat<0)=0;
-I_rec = my_col2im(X_hat,neib,n);
 
-%X_t = M.*X + (I - M).*(U*Z);
-%I_rec = my_col2im(X_t,neib,n);
-% TO BE FILLED
+% Median-based imputation of missing values
+function R = impute(I, M)
+  R = I;
+  NM = ~M;
+  pred = zeros(1, size(R, 1));
+  for i = 1:size(R, 1)
+    buf = R(i, :);
+    pred(i) = median(buf(M(i, :)));
+    if(isnan(pred(i)))
+      pred(i) = 0.5;
+    end
+  end
+  predc = zeros(1, size(R, 2));
+  for i = 1:size(R, 2)
+    buf = R(:, i);
+    predc(i) = median(buf(M(:, i)));
+    if(isnan(predc(i)))
+      predc(i) = 0.5;
+    end            
+  end
+  X2 = R;
+  for i = 1:size(R, 1)
+    buf = R(i, :);
+    buf(NM(i, :)) = pred(i);
+    X2(i, :) = buf;
+  end
+  R = X2;
+  for i = 1:size(R, 2)
+    buf = R(:, i);
+    buf(NM(:, i)) = 0.5*(buf(NM(:, i)) + predc(i));
+    R(:, i) = buf;
+  end
+end

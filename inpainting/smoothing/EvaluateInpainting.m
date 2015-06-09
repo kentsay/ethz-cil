@@ -37,9 +37,11 @@ for i = 3:length(dir) % running through the folder
     RGB = double(cat(3, I_rec, I_rec, I_rec));
     
     count = count+1;
-    subplot(2,3,count);
+    subaxis(2,3,count, 'Spacing', 0.03, 'Padding', 0, 'Margin', 0.09);
     imagesc((I - I_rec).^2);
-    subplot(2,3,count+3);
+    axis tight
+    axis off
+    subaxis(2,3,count+3, 'Spacing', 0, 'Padding', 0, 'Margin', 0.02);
     imshow(RGB,'Border','tight');
     
     % Measure approximation error
