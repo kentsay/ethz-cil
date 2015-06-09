@@ -26,7 +26,7 @@ M = my_im2col(mask, neib);
 U = buildDictionary(neib*neib);  % TO BE FILLED 
 
 % Do the sparse coding with modified Matching Pursuit
-Z = sparseCodingEM(U, X, M, sigma, rc_min);
+Z = sparseCoding(U, X, M, sigma, rc_min);
  
 
 % You need to do the image reconstruction using the known image information
