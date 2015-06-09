@@ -7,7 +7,8 @@ k = 1;
 
 Errors = []; % mean squared errors for each image would be stored here
 
-
+figure('units','normalized','outerposition',[0 0 1 1]);
+count = 0;
 for i = 3:length(dir) % running through the folder
     
     file_name = file_list(i).name; % get current filename
@@ -33,8 +34,14 @@ for i = 3:length(dir) % running through the folder
           
     % Call the main inPainting function
     I_rec = inPainting(I_mask, mask);
-    figure;
-    imshow(I_rec);
+    RGB = double(cat(3, I_rec, I_rec, I_rec));
+    
+    count = count+1;
+    subplot(2,3,count);
+    imagesc((I - I_rec).^2);
+    subplot(2,3,count+3);
+    imshow(RGB,'Border','tight');
+    
     % Measure approximation error
     Errors(k) = mean(mean(mean( ((I - I_rec) ).^2)));
     
@@ -42,5 +49,6 @@ for i = 3:length(dir) % running through the folder
 end
 
 Result(1) = mean(Errors);
+suptitle(['Average quadratic error: ' num2str(Result(1))])
 
 disp(['Average quadratic error: ' num2str(Result(1))])
