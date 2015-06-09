@@ -33,28 +33,26 @@ for nn = 1:n
    
     % TO BE FILLED
     rc_max = max(abs(r'*U));
-    n_it = 0;
+    mu = MM*U;
+    nmu = sqrt(sum(abs(mu).^2,1));
     while (norm(r) > sigma*norm(x)) && (rc_max > rc_min)
         
         % TO BE FILLED 
         
         % Select atom with maximum absolute correlation to the residual
         % Update the maximum absolute correlation
-        [rc_max,d] = max(abs(r'*U));
+        
+       
+        [rc_max,d] = max(abs(r'*mu)./nmu);
         %rc_max = max([rc_max;val])
         % Update coefficient vector z and residual z
-        u_d = U(:,d);
-        z(d) = z(d) + u_d'*r;
-        r = r - (u_d'*r)*u_d;
+        fact = (mu(:,d)'*r)/nmu(:,d);
+        z(d) = z(d) + fact;
+        r = r - fact*mu(:,d);
         % For the inpainting modification make sure that you only consider
         % the known observations defined by the mask M
-        r = MM*r;
-        n_it = n_it + 1;
     end
-    its(nn) = n_it;
     
     % Add the calculated coefficient vector z to the overall matrix Z
     Z(:,nn) = z;
 end
-median(its)
-max(its)

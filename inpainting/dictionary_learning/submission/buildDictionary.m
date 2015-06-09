@@ -15,7 +15,6 @@ try
     U = temp.U;
 catch
     U = dictionary_learning(X);
-    save('dictionary.mat')
 end
 
    
