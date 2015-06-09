@@ -10,7 +10,6 @@ function [ I_rec ] = diffusion_inpainting( I, mask, T )
 
     %% Fill in pixels and construct I_rec
     %  Fills in the pixel using the mean of the pixels around it
-    %K = fspecial('gaussian', window_size * 2 + 1);
     for t = 1:T
         I_rec = imfilter(I_rec, K, 'replicate');
         I_rec = (double(mask==0) .* I_rec) + (double(mask~=0) .* I);
