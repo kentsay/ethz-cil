@@ -20,7 +20,7 @@ function [U,Z] = dictionary_learning(X)
 l = 512;
 sigma = 0.01;
 rc_min = 0.01;
-iter_num = n;
+iter_num = 50;
 init_mode = 'samples';
 
 
@@ -47,7 +47,6 @@ end
 
 
 Z = zeros(l,n);
-U_new = zeros(d,l);
 A = zeros(l,l);
 B = zeros(d,l);
 
