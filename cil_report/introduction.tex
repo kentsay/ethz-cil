@@ -1,8 +1,8 @@
 \section{Introduction}
 \label{sec:introduction}
 
-Automatically filling in missing areas of an image is an inference task often referred to as inpainting. It is commonly used to restore old damaged photographs or to remove objects from an image \cite{bertalmio2000image}. These two settings are inherently different. The first needs to restore many small areas of an image. The second restores a few large areas of an image.
+Automatically reconstructing the missing areas of an image is an inference task often referred to as inpainting. It is commonly used to restore old damaged photographs or to remove objects from an image \cite{bertalmio2000image}. A variety of approaches have been proposed in the literature to solve this problem. Many successful algorithms use a diffusion-based approach where local pixel information is propagated into the missing areas of an image. Other approaches involve the reconstruction of the full image based on wavelets or dictionaries.
 
-In this paper we introduce a novel approach that solves the inpainting task for the first setting, restoring small damaged areas in pictures. Our approach is based on the diffusion algorithm described by McKenna et al. \cite{richard2001fast}.
+In this paper we introduce a novel algorithm that solves the inpainting task by using  directional diffusion. This approach is based on the fast diffusion algorithm described by McKenna et al. \cite{richard2001fast}. It attempts to improve on the fast diffusion algorithm by taking into account the directionality of parts of the image to select proper diffusion kernels.
 
 The paper is structured in several sections. First we will describe the methods we use to accomplish the inpainting task in section \ref{sec:methods}. Next we will discuss the results of our methods in section \ref{sec:results} and compare them to several baselines. In section \ref{sec:discussion} the strengths and weaknesses of our novel approach are discussed. Finally the paper is concluded in section \ref{sec:conclusion} and possible future work is described in section \ref{sec:futurework}.
