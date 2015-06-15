@@ -6,11 +6,14 @@ file_list = dir();
 k = 1;
 
 Errors = []; % mean squared errors for each image would be stored here
-
-figure('units','normalized','outerposition',[0 0 1 1]);
-count = 0;
+Times = [];
+it = 9;
+l = linspace(0.1,0.9,it);
+Result_Diffision = zeros(1,it);
+Time_Diffision = zeros(1,it);
+for j=1:it
 for i = 3:length(dir) % running through the folder
-    
+    tic;
     file_name = file_list(i).name; % get current filename
     
     % Only keep the images in the loop
@@ -27,30 +30,30 @@ for i = 3:length(dir) % running through the folder
     
     % Read the respective binary mask
     % EVALUATION IS DONE WITH A FIXED MASK
-    mask = imread(mask_name);
+    %mask = imread(mask_name);
     
+
+    mask = random_mask(512,l(j));
     I_mask = I;
     I_mask(~mask) = 0;
-          
+    %figure;
+    %imshow(I_mask); 
     % Call the main inPainting function
     I_rec = inPainting(I_mask, mask);
-    RGB = double(cat(3, I_rec, I_rec, I_rec));
-    
-    count = count+1;
-    subaxis(2,3,count, 'Spacing', 0.03, 'Padding', 0, 'Margin', 0.09);
-    imagesc((I - I_rec).^2);
-    axis tight
-    axis off
-    subaxis(2,3,count+3, 'Spacing', 0, 'Padding', 0, 'Margin', 0.02);
-    imshow(RGB,'Border','tight');
-    
+    %figure;
+    %imshow(I_rec);
     % Measure approximation error
     Errors(k) = mean(mean(mean( ((I - I_rec) ).^2)));
-    
+    Times(k) = toc;
     k = k+1;
+    
+end
+err = mean(Errors);
+Result_Diffision(j) = err;
+Time_Diffision(j) = mean(Times);
 end
 
-Result(1) = mean(Errors);
-suptitle(['Average quadratic error: ' num2str(Result(1))])
+plot(l,Result_Diffision,'*');
 
-disp(['Average quadratic error: ' num2str(Result(1))])
+
+disp(['Average quadratic error: ' num2str(Result_Diffision(1))])
