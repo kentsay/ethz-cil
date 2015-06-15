@@ -1,8 +1,9 @@
 \section{Methods}
 \label{sec:methods}
 
-To accomplish the task of inpainting two algorithms have been developed: regular diffusion and directional diffusion. The first is a naive yet fast approach. The second is a continuation on the first, which takes into account the directionality of image patches to perform smarter diffusions.
+We present two algorithms that accomplish the inpainting task: regular diffusion and directional diffusion. The first is a naive yet fast approach. The second is an extension of the first, which takes into account the directionality of image patches to perform smarter diffusions. Although it is slower, it typically leads to better results.
 
 \input{methods/diffusion}
 
 \input{methods/directional}
+
