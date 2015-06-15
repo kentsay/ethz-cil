@@ -1,3 +1,16 @@
 \subsection{Regular diffusion}
-The idea of diffusion is to fix the known regions of the image and let them diffuse into the unknown regions. This can be done very efficiently by using a convolutional kernel. By iteratively convolving a kernel on the entire image and then restoring the known pixels we can obtain an inpainted image. This process is displayed in figure \ref{fig:diffusion}. The quality of the solution heavily depends on the kernel used. A variety of kernels are used which are displayed in figure \ref{fig:diffusion}.
+The idea of diffusion is to fix the known regions of the image and let them diffuse into the unknown regions. This can be done very efficiently by using a convolutional kernel. By iteratively convolving a kernel on the entire image and then restoring the known pixels we can obtain an inpainted image. This process is described in algorithm \ref{alg:diffusion}. The quality of the solution heavily depends on the kernel used. A variety of kernels are used which are displayed in figure \ref{fig:diffusion}.
 
+\begin{algorithm}
+	\KwIn{Image $I$, mask $M$ and diffusion kernel $K$}
+	\KwResult{Reconstructed image $I_{r}$}
+	$I_{prev} = 0_{size(I)}$\;
+	$I_{r} = I$\;
+	\While{$\|I_{r} - I_{prev} \|_{F} > \epsilon$}{
+		$I_{r} = \text{convolve}(I_{r}, K)$\;
+		$I_{r} = I_{r} \circ \mathrm{I}_{M = 0} + I \circ \mathrm{I}_{M \neq 0}$ \;
+	}
+	\quad
+\caption{Diffusion algorithm for inpainting. Because the kernel $K$ will need to refer to pixels outside of the image, we replicate the outer borders of $I$ outward.}
+\label{alg:diffusion}
+\end{algorithm}
