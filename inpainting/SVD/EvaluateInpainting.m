@@ -2,7 +2,7 @@
 %
 % NOTE Images must be have .png ending and reside in the same folder.
 
-pathstr = './data/'
+pathstr = './data/';
 file_list = dir(strcat(pathstr,'*.png')); 
 k = 1;
 
