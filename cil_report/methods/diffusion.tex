@@ -3,7 +3,7 @@ The idea of diffusion is to fix the known regions of the image and let them diff
 
 \begin{figure}
 \begin{flalign*}
-K_c &= \begin{bmatrix}0 & 0.25 & 0 \\ 0.25 & 0 & 0.25 \\ 0 & 0.25 & 0\end{bmatrix}\\
+K_{\text{diamond}} &= \begin{bmatrix}0 & 0.25 & 0 \\ 0.25 & 0 & 0.25 \\ 0 & 0.25 & 0\end{bmatrix}\\
 K_{\text{gauss}} &= \begin{bmatrix}0.011 & 0.084 & 0.011\\0.084 & 0.620 & 0.084 \\0.011 & 0.084 & 0.011\end{bmatrix}\\
 K_{\text{diag}} &= \begin{bmatrix}0.38 & 0.04 & 0.04 \\ 0.04 & 0 & 0.04 \\ 0.04 & 0.04 & 0.38\end{bmatrix}
 \end{flalign*}
@@ -32,12 +32,14 @@ K_{\text{diag}} &= \begin{bmatrix}0.38 & 0.04 & 0.04 \\ 0.04 & 0 & 0.04 \\ 0.04 
 	\begin{subfigure}[b]{0.45\textwidth}
 		\centering
 		\includegraphics[clip, trim=0cm 1cm 0cm 0.5cm, width=0.85\textwidth]{figures/step-by-step-cross}
-		\caption{Cross kernel $K_c$.}
+		\caption{Diamond kernel $K_{diamond}$}
+		\label{fig:stepbystepcross}
 	\end{subfigure}
 	\begin{subfigure}[b]{0.45\textwidth}
 		\centering
 		\includegraphics[clip, trim=0cm 1cm 0cm 0.5cm, width=0.85\textwidth]{figures/step-by-step-directional}
 		\caption{Directional kernel $K_\theta$ for $\theta = 146$.}
+		\label{fig:stepbystepdir}
 	\end{subfigure}
 	\caption{Step-by-step illustration of the diffusion process with different kernels. Each step represent 20 iterations.}
 \end{figure}
