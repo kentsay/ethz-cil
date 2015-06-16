@@ -1,22 +1,24 @@
 %% Script to create plots including different algorithms. The user defines all the subfolders needed for the plot. This script is based on the EvaluateInpainting.m provided in the course.
 
 
-dirs = {'dictionary_learning'};
+dirs = {'diffusion','gradients','baseline','SVD','dictionary_learning'};
 
 
 for curr_dir_number = 1:length(dirs)
     curr_dir = dirs{curr_dir_number};
-    file_list = dir(curr_dir); 
+    file_list = dir('data'); 
     k = 1;
 
     Errors = []; % mean squared errors for each image would be stored here
     Times = [];
     n_it = 9;
     miss_interval = linspace(0.1,0.9,n_it);
-    Result = zeros(1,n_it);
-    Time = zeros(1,n_it);
+    Result_Mean = zeros(1,n_it);
+    Result_Std = zeros(1,n_it);
+    Time_Mean = zeros(1,n_it);
+    Time_Std = zeros(1,n_it);
     for j=1:n_it
-        for i = 3:length(dir) % running through the folder
+        for i = 3:length(file_list) % running through the folder
             tic;
             file_name = file_list(i).name; % get current filename
 
@@ -55,11 +57,14 @@ for curr_dir_number = 1:length(dirs)
 
         end
         err = mean(Errors);
-        Result(j) = err;
-        Time(j) = mean(Times);
+        std_err = std(Errors);
+        Result_Mean(j) = err;
+        Result_Std(j) = std_err;
+        Time_Mean(j) = mean(Times);
+        Time_Std(j) = std(Times);
     end
     name = strcat(curr_dir,'.mat');
-    save(name,'Result','Time','miss_interval');
+    save(name,'Result_Mean','Result_Std','Time_Mean','Time_Std','miss_interval');
 end
 
 
