@@ -2,7 +2,7 @@
 *.aux
 *.log
 *.out
-*.pdf
+cil_report.pdf
 *.bbl
 *.blg
 *.synctex.gz
