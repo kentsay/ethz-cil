@@ -1,7 +1,7 @@
 %% Script to create plots including different algorithms. The user defines all the subfolders needed for the plot. This script is based on the EvaluateInpainting.m provided in the course.
 
 
-dirs = {'diffusion','gradients','baseline','SVD','dictionary_learning'};
+dirs = {'dictionary_learning'};
 
 
 for curr_dir_number = 1:length(dirs)
