@@ -18,11 +18,12 @@ Given an image patch $P$ we wish to compute an estimated angle $\theta$ of the c
 \begin{flalign*}
 M^{(x, y)}_{i, j} &= M_{(i + x) \text{ mod } n, (j + y)\text{ mod } m}
 \end{flalign*}
-Using this shift operator, we compute two basic metrics on the image patch. The first metric $v$ checks how much each pixel differs from the one left of it and provides large values for images with a lot of vertical stripes. The second metric $h$ does the same but checks how much each pixel differs from the one below it. This gives large values for images with a lot of horizontal stripes.
+Using this shift operator, we compute two basic metrics on the image patch:
 \begin{flalign*}
 v &= \sum_i \sum_j | P_{i,j} - P_{i,j}^{(1, 0)} | \\
-h &= \sum_i \sum_j | P_{i,j} - P_{i,j}^{(0, 1)} | \\
+h &= \sum_i \sum_j | P_{i,j} - P_{i,j}^{(0, 1)} | 
 \end{flalign*}
+The first metric $v$ checks how much each pixel differs from the one left of it and provides large values for images with a lot of vertical stripes. The second metric $h$ does the same but checks how much each pixel differs from the one below it. This gives large values for images with a lot of horizontal stripes.
 
 By comparing $h$ and $v$ we can determine if the contents of the image patch will have mostly vertical lines ($v > h$), mostly horizontal lines ($v < h$) or diagonal lines ($v \approx h$). We can turn this into an angle, by computing the fraction of $h$ to $h + v$.  We add $1$ to both sides to prevent division by zero:
 \begin{flalign*}
@@ -45,10 +46,10 @@ If this value $d$ is close to 1, we can assume the image is left-slanted. If it 
 In figure \ref{fig:directionality} we show the angle $\theta$, which has been computed on image patches of size $32 \times 32$, as white lines. The heuristic works well on image patches where the contents is simple and consists of mostly straight lines. When the contents of an image patch gets more complex, inferring the angle becomes more difficult and the heuristic fails.
 
 \subsubsection{Constructing a directional kernel}
-After computing the angle $\theta$ for an image patch, we wish to construct a directional kernel $K_\theta$, which puts more weight on pixels that align with the angle $\theta$. We start with a diagonal kernel $K_{\text{diag}}$. This kernel is converted to a $3\times 3$ image which is rotated by $\theta$ degrees and cropped to obtain a new $3\times 3$ image representing the rotated kernel. During the rotation process, bicubic interpolation is used to smooth the intermediate values. The resulting image is converted back to a $3 \times 3$ matrix representing the kernel $K_\theta$.
+After computing the angle $\theta$ for an image patch, we wish to construct a directional kernel $K_\theta$, which puts more weight on pixels that align with the angle $\theta$. We start with a diagonal kernel $K_{\text{diag}}$ (see figure \ref{fig:kernels}). This kernel is converted to a $3\times 3$ image which is rotated by $\theta-45$ degrees (because the initial kernel was diagonal, we subtract 45 degrees) and cropped to obtain a new $3\times 3$ image representing the rotated kernel. During the rotation process, bicubic interpolation is used to smooth the intermediate values. The resulting image is converted back to a $3 \times 3$ matrix representing the kernel $K_\theta$.
 
 \subsubsection{Per-patch diffusion using $K_\theta$}
-Now that we have a kernel $K_\theta$ for each image patch $P$ we can run our original diffusion algorithm on each of the patches. The reconstructed image is created by putting all the patches back together after running the diffusion algorithm on them.
+Now that we have a kernel $K_\theta$ for each image patch $P$ we can run the diffusion algorithm (see algorithm \ref{alg:diffusion}) on each of the patches. The reconstructed image is created by putting all the patches back together after running the diffusion algorithm on them.
 
 \begin{figure*}
 	\centering
