@@ -1,13 +1,12 @@
 %% Script to create plots including different algorithms. The user defines all the subfolders needed for the plot. This script is based on the EvaluateInpainting.m provided in the course.
 
 
-dirs = {'dictionary_learning'};
+dirs = {'diffusion','diffusion_guass','SVD','gradients'};
 
 
 for curr_dir_number = 1:length(dirs)
     curr_dir = dirs{curr_dir_number};
     file_list = dir('data'); 
-    k = 1;
 
     Errors = []; % mean squared errors for each image would be stored here
     Times = [];
@@ -18,6 +17,8 @@ for curr_dir_number = 1:length(dirs)
     Time_Mean = zeros(1,n_it);
     Time_Std = zeros(1,n_it);
     for j=1:n_it
+        k = 1;
+        mask = random_mask(512,miss_interval(j));
         for i = 3:length(file_list) % running through the folder
             tic;
             file_name = file_list(i).name; % get current filename
@@ -39,7 +40,7 @@ for curr_dir_number = 1:length(dirs)
             %mask = imread(mask_name);
 
 
-            mask = random_mask(512,miss_interval(j));
+            
             I_mask = I;
             I_mask(~mask) = 0;
             %figure;
@@ -54,7 +55,6 @@ for curr_dir_number = 1:length(dirs)
             Errors(k) = mean(mean(mean( ((I - I_rec) ).^2)));
             Times(k) = toc;
             k = k+1;
-
         end
         err = mean(Errors);
         std_err = std(Errors);
