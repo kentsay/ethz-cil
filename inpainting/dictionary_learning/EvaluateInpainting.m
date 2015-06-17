@@ -11,7 +11,7 @@ it = 9;
 l = linspace(0.1,0.9,it);
 Result_Learned = zeros(1,it);
 Time_Learned = zeros(1,it);
-for j=1:it
+
 for i = 3:length(dir) % running through the folder
     tic;
     file_name = file_list(i).name; % get current filename
@@ -44,13 +44,9 @@ for i = 3:length(dir) % running through the folder
     %imshow(I_rec);
     % Measure approximation error
     Errors(k) = mean(mean(mean( ((I - I_rec) ).^2)));
-    Times(k) = toc;
+    Times(k) = toc
     k = k+1;
     
-end
-err = mean(Errors);
-Result_Learned(j) = err;
-Time_Learned(j) = mean(Times);
 end
 
 plot(l,Result_Learned,'*');

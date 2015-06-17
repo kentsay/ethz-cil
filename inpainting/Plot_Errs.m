@@ -1,8 +1,9 @@
 %% Script to create plots including different algorithms. The user defines all the subfolders needed for the plot. This script is based on the EvaluateInpainting.m provided in the course.
 
 
-dirs = {'baseline'};
+dirs = {'diffusion_guass'};
 
+%mask = imread('mask/mask.png');
 
 for curr_dir_number = 1:length(dirs)
     curr_dir = dirs{curr_dir_number};
@@ -37,8 +38,7 @@ for curr_dir_number = 1:length(dirs)
 
             % Read the respective binary mask
             % EVALUATION IS DONE WITH A FIXED MASK
-            %mask = imread(mask_name);
-
+            
 
             
             I_mask = I;

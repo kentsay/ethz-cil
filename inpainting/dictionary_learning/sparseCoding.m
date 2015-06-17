@@ -13,7 +13,7 @@ function Z = sparseCoding(U, X, M, sigma, rc_min)
 % OUTPUT
 % Z: MP coding
 %
-
+max_it = 300;
 l = size(U,2);
 n = size(X,2);
 
@@ -34,7 +34,8 @@ for nn = 1:n
     Mu = MM*U;
     col_norm_m = sqrt(sum(Mu.^2,1));
     rc_max = max(abs(Mu'*r));
-    while (norm(r) > sigma*norm(x)) && (rc_max > rc_min)
+    it = 0;
+    while (norm(r) > sigma*norm(x)) && (rc_max > rc_min) && it < max_it
         % Select atom with maximum absolute correlation to the residual
         % Update the maximum absolute correlation
         [rc_max,d] = max(abs(Mu'*r./col_norm_m'));
@@ -44,6 +45,7 @@ for nn = 1:n
         r = r - (Mu_d'*r)*Mu_d/col_norm_m(d);
         % For the inpainting modification make sure that you only consider
         % the known observations defined by the mask M
+        it = it + 1;
     end
     
     % Add the calculated coefficient vector z to the overall matrix Z
