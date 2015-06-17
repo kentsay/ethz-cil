@@ -20,10 +20,10 @@ K_{\text{diag}} &= \begin{bmatrix}0.38 & 0.04 & 0.04 \\ 0.04 & 0 & 0.04 \\ 0.04 
 	\While{$\|I_{r} - I_{prev} \|_{F} > \epsilon$}{
 		$I_{prev} \leftarrow I_{r}$\;
 		$I_{r} \leftarrow \text{convolve}(I_{r}, K)$\;
-		$I_{r} \leftarrow I_{r} \circ \mathrm{I}_{M = 0} + I \circ \mathrm{I}_{M \neq 0}$ \;
+		$I_{r} \leftarrow I_{r} \circ \mathbf{1}_{M = 0} + I \circ \mathbf{1}_{M \neq 0}$ \;
 	}
 	\quad
-\caption{Diffusion algorithm for inpainting.}
+\caption{Diffusion algorithm for inpainting. We denote element-wise multiplication by the $\circ$ operator. The $\mathbf{1}_{M=0}$ function represents a matrix with elements $(i,j)$ set to 1 when $M_{i,j}=0$ and 0 otherwise.}
 \label{alg:diffusion}
 \end{algorithm}
 
