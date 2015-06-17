@@ -12,7 +12,7 @@ function I_rec = inPainting(I, mask)
 %% Set parameters and construct diffusion kernel
 I_rec = I;
 I_rec(mask==0) = mean(mean(I_rec));
-threshold = 0.0005;
+threshold = 0.00001;
 K = 1/4 * [0 1 0;
            1 0 1;
            0 1 0];
@@ -27,34 +27,42 @@ end
 
 %% Compute gradients of image patches
 %  With this we know the directionality of patches in images
-patch_size = 64;
+patch_size = 32;
 [gradients, weights] = imagePatchGradients(I_rec, patch_size);
 
 %% Compute kernels based on gradients
 %  This computes kernels that are rotated according to the patch gradients
-arrow = eye(patch_size);
-figure;
-imshow(I_rec);
-hold on;
+%arrow = eye(patch_size); arrow = imfilter(arrow, [1 1 1; 1 1 1; 1 1 1]);
+%figure;
+%imshow(I_rec);
+%hold on;
 K_rotate = zeros(3, 3, size(gradients,1), size(gradients,2));
+
 for x = 1:patch_size:size(I_rec,1)
     for y = 1:patch_size:size(I_rec,2)
         i = 1 + (x - 1) / patch_size;
         j = 1 + (y - 1) / patch_size;
         
         % Construct directional kernel for this patch
-        K_patch = eye(3) * 5 + ones(3);
+        K_patch = eye(3) * 8 + ones(3);
         K_patch(2,2) = 0;
-        K_patch = imrotate(K_patch, gradients(i,j) - 45, 'nearest', 'crop');
-        %K_patch = K_patch .* weights(i,j) + K .* (1 - weights(i,j));
+        %arrow_r = zeros(patch_size);
+        if weights(i,j) < 0.03
+            gradients(i,j) = 90;
+            K_patch = [0 1 0; 1 0 1; 0 1 0] * 1/4;
+        else
+            K_patch = imrotate(K_patch, gradients(i,j) + 45, 'bicubic', 'crop');
+            %arrow_r = imrotate(arrow, gradients(i,j) + 45, 'bicubic', 'crop');
+        end
+        
+        % Normalize kernel and store it
         K_patch = K_patch ./ sum(sum(K_patch));
         K_rotate(:, :, i, j) = K_patch;
         
         % Draw arrow
-        arrow_r = imrotate(arrow, gradients(i,j) - 45, 'nearest', 'crop');
-        h = imagesc([y y+patch_size], [x x+patch_size], arrow_r);
-        %imagesc([y y+5], [x x+5], K_patch);
-        set(h, 'AlphaData', weights(i,j) * 0.6);
+        %arrow_final = arrow_r; %cat(3, 0.1 * ones(size(arrow_r)), arrow_r, 0.1 * ones(size(arrow_r)));
+        %h = imagesc([y y+patch_size], [x x+patch_size], arrow_final);
+        %set(h, 'AlphaData', 0.5 * weights(i,j));
     end
 end
 
