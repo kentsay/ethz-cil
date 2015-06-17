@@ -14,7 +14,7 @@ K_{\text{diag}} &= \begin{bmatrix}0.38 & 0.04 & 0.04 \\ 0.04 & 0 & 0.04 \\ 0.04 
 \begin{algorithm}
 	\KwIn{Image $I$, mask $M$, kernel $K$ and threshold $\epsilon$}
 	\KwResult{Reconstructed image $I_{r}$}
-	$K \leftarrow \frac{1}{\sum_i \sum_j K_{i,j}} * K$\;
+	$K \leftarrow \frac{K}{\sum_i \sum_j K_{i,j}}$ (normalize $K$ to preserve energy)\; 
 	$I_{prev} \leftarrow 0_{size(I)}$\;
 	$I_{r} \leftarrow I$\;
 	\While{$\|I_{r} - I_{prev} \|_{F} > \epsilon$}{
