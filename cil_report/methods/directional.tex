@@ -1,6 +1,31 @@
 \subsection{Directional diffusion}
 
-Regular diffusion will present noticeable artifacts. These typically occur at high-contrast edges of the image. Because the diffusion kernel equally weighs pixels from all directions it creates a blur effect and is unable to properly propogate edges into the unknown regions. This effect can be seen in figure \ref{fig:stepbystepcross}. To help resolve this problem we use directional kernels that weigh pixels from certain directions more heavily. To do this we divide the image into separate patches. For each patch we infer the general directionality by using a heuristic. Based on this directionality we construct a directional kernel. Finally we apply this kernel to do the inpainting for that specific patch. By inferring the correct directionality, the artifacts can be noticeably reduced as seen in figure \ref{fig:stepbystepdir}. We will now explain these steps in more detail.
+Regular diffusion will present noticeable artifacts. These typically occur at high-contrast edges of the image. Because the diffusion kernel equally weighs pixels from all directions it creates a blur effect and is unable to properly propogate edges into the unknown regions. This effect can be seen in figure \ref{fig:stepbystepcross}. To help resolve this problem we use directional kernels that weigh pixels from certain directions more heavily. To do this we first apply the regular diffusion algorithm to the image to get an estimate of the original image. Then we divide the image into separate patches. For each patch we infer the general directionality by using a heuristic. Based on this directionality we construct a directional kernel. Finally we apply this kernel to do the inpainting for that specific patch. By inferring the correct directionality, the artifacts can be noticeably reduced as seen in figure \ref{fig:stepbystepdir}. We will now explain these steps in more detail.
+
+\begin{figure*}
+	\centering
+	\begin{subfigure}[b]{0.3\textwidth}
+		\centering
+		\includegraphics[clip, trim=2cm 0cm 2cm 0cm, width=0.9\textwidth]{figures/claudia-32x32}
+		\caption{The claudia image.}
+		\label{fig:claudia}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.3\textwidth}
+		\centering
+		\includegraphics[clip, trim=2cm 0cm 2cm 0cm, width=0.9\textwidth]{figures/spiral-32x32}
+		\caption{The spiral image.}
+		\label{fig:spiral}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.3\textwidth}
+		\centering
+		\includegraphics[clip, trim=2cm 0cm 2cm 0cm, width=0.9\textwidth]{figures/tomandjerry-32x32}
+		\caption{The tom and jerry image.}
+		\label{fig:spiral}
+	\end{subfigure}
+	
+	\caption{The directionality of 32x32 pixel patches shown as white lines after the first diffusion stage.}
+	\label{fig:directionality}
+\end{figure*}
 
 \subsubsection{Divide image into $n \times n$ patches}
 The directionality of the contents of an image is typically a local property. Hence we want to know what the directionality of a small image patch is. An image $I$ can be broken down into patches of size $n \times n$. We define a patch $P$ starting at pixel location $i,j$ as:
@@ -30,12 +55,12 @@ By comparing $h$ and $v$ we can determine if the contents of the image patch wil
 \theta_1 &= 90 \frac{h + 1}{h + v + 1}
 \end{flalign*}
 
-A problem with this approach is that it only gives an angle from 0$\degree$ to 90$\degree$. It cannot infer if the diagonal lines on the image patch are left-slanted or right-slanted since these will have $h \approx v$. To help resolve this we propose a heuristic for the diagonal slant by computing $d$, which checks how much each pixel differs from the one diagonally left-below it. This gives large values for images with left-slanted diagonal lines but small values for images with right-slanted diagonal lines. We wish to normalize this value by dividing it by $v+h$, so it ranges from 0 to 1. We add 1 to both sides to prevent division by zero:
+A problem with this approach is that it only gives an angle from 0$\degree$ to 90$\degree$. It cannot infer if the diagonal lines on the image patch are left-slanted or right-slanted since these will have $h \approx v$. To help resolve this we propose a heuristic for the diagonal slant by computing $d$, which checks how much each pixel differs from the one diagonally right-below it. This gives large values for images with right-slanted diagonal lines but small values for images with left-slanted diagonal lines. We wish to normalize this value by dividing it by $v+h$, so it ranges from 0 to 1. We add 1 to both sides to prevent division by zero:
 \begin{flalign*}
 d &= \frac{1 + \sum_{i, j} | P_{i,j} - P_{i,j}^{(1, 1)} |}{1 + v + h}
 \end{flalign*}
 
-If this value $d$ is close to 1, we can assume the image is left-slanted. If it is close to 0, we can assume the image is right-slanted. A value close to 0.5 indicates that the image patch has both left and right slanted lines. We can now compute the angle $\theta$ with the additional parameter $d$ using the following heuristic:
+If this value $d$ is close to 1, we can assume the image is right-slanted. If it is close to 0, we can assume the image is left-slanted. A value close to 0.5 indicates that the image patch has both left and right slanted lines. We can now compute the angle $\theta$ with the additional parameter $d$ using the following heuristic:
 \begin{flalign*}
 \theta &=  - 90 + \begin{cases}
 90d+\theta_1 & \text{if } d > 0.6 \\
@@ -51,27 +76,3 @@ After computing the angle $\theta$ for an image patch, we wish to construct a di
 \subsubsection{Per-patch diffusion using $K_\theta$}
 Now that we have a kernel $K_\theta$ for each image patch $P$ we can run the diffusion algorithm (see algorithm \ref{alg:diffusion}) on each of the patches. The reconstructed image is created by putting all the patches back together after running the diffusion algorithm on them.
 
-\begin{figure*}
-	\centering
-	\begin{subfigure}[b]{0.3\textwidth}
-		\centering
-		\includegraphics[clip, trim=2cm 0cm 2cm 0cm, width=0.9\textwidth]{figures/claudia-32x32}
-		\caption{The claudia image.}
-		\label{fig:claudia}
-	\end{subfigure}
-	\begin{subfigure}[b]{0.3\textwidth}
-		\centering
-		\includegraphics[clip, trim=2cm 0cm 2cm 0cm, width=0.9\textwidth]{figures/spiral-32x32}
-		\caption{The spiral image.}
-		\label{fig:spiral}
-	\end{subfigure}
-	\begin{subfigure}[b]{0.3\textwidth}
-		\centering
-		\includegraphics[clip, trim=2cm 0cm 2cm 0cm, width=0.9\textwidth]{figures/tomandjerry-32x32}
-		\caption{The tom and jerry image.}
-		\label{fig:spiral}
-	\end{subfigure}
-	
-	\caption{The directionality of 32x32 pixel patches shown as white lines after the first diffusion stage.}
-	\label{fig:directionality}
-\end{figure*}

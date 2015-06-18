@@ -1,5 +1,5 @@
 \subsection{Regular diffusion}
-The idea of diffusion is to fix the known regions of the image and let them diffuse into the unknown regions. This can be done very efficiently by using a convolutional kernel. By iteratively convolving a kernel with the entire image and then restoring the known pixels we can obtain an inpainted image. This process is described in algorithm \ref{alg:diffusion}. The quality of the solution heavily depends on the kernel used. A variety of kernels can be used, some of which are displayed in figure \ref{fig:kernels}.
+The idea of diffusion is to fix the known regions of the image and let them diffuse into the unknown regions. This can be done very efficiently by using a convolutional kernel. By iteratively convolving a kernel with the entire image and then restoring the known pixels we can obtain an inpainted image. This process is described in algorithm \ref{alg:diffusion}. The quality of the solution heavily depends on the kernel used. A variety of kernels can be used, some of which are displayed in figure \ref{fig:kernels}. To convolve a kernel with an image we have to refer to pixels outside of the border of the image. We replicate the borders of the image outwards so the kernel can properly refer to these values.
 
 \begin{figure}
 \begin{flalign*}
@@ -26,7 +26,6 @@ K_{\text{diag}} &= \begin{bmatrix}0.38 & 0.04 & 0.04 \\ 0.04 & 0 & 0.04 \\ 0.04 
 \caption{Diffusion algorithm for inpainting. We denote element-wise multiplication with the $\circ$ operator. The $\mathbf{1}_{M=0}$ function represents a matrix with elements $(i,j)$ set to 1 when $M_{i,j}=0$ and 0 otherwise.}
 \label{alg:diffusion}
 \end{algorithm}
-
 \begin{figure}
 	\centering
 	\begin{subfigure}[b]{0.4\textwidth}
