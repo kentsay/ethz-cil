@@ -1,7 +1,7 @@
 function [U,Z] = dictionary_learning(X)
-% Implements dictionary learning algorithm, using matching pursuit as the
-% sparse coding stage.
-%
+
+% Implements an onlne learning algorithm based on the paper: Online Dictionary Learning for Sparse Coding
+% by Julien Mairal Francis Bach Jean Ponce and Guillermo Sapiro
 % INPUTS
 % X: (d x n) data matrix (samples as columns)
 %
