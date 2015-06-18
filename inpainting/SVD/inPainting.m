@@ -12,7 +12,7 @@ function R = inPainting(I, M)
   
   % Loop through patches
   for i = 1:size(CI, 1)
-    for j = 1:size(CI, 2)
+    for j =1:size(CI, 2)
       Ib = CI{i, j};
       Mb = CM{i, j};
       if nnz(Mb) == numel(Mb)

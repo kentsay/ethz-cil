@@ -1,9 +1,9 @@
 %% Script to create plots including different algorithms. The user defines all the subfolders needed for the plot. This script is based on the EvaluateInpainting.m provided in the course.
 
 
-dirs = {'diffusion_diamond','diffusion_guass','svd','gradients'};
+dirs = {'diffusion_diamond'};
 rand_mask_dir = {'rand_masks'};
-text_mask_dir = {'text_mask'};
+text_mask_dir = {'text_masks'};
 
 for curr_dir_number = 1:length(dirs)
     disp(curr_dir_number);
@@ -11,7 +11,7 @@ for curr_dir_number = 1:length(dirs)
     file_list = dir('data'); 
     
     %get all the indices of the mask pictures in the respecitve folder
-    mask_file_list = dir('mask/text_mask');
+    mask_file_list = dir('mask/rand_masks');
     n_it = [];
     for i=1:length(mask_file_list)
         mask_name = mask_file_list(i).name;
@@ -34,7 +34,7 @@ for curr_dir_number = 1:length(dirs)
     for j=1:m
         k = 1;
         disp(['iteration: ' num2str(j)]);
-        mask_name = mask_file_list(n_it(j)).name;
+        mask_name = mask_file_list(n_it()).name;
         mask = imread(mask_name);
         
         for i = 3:length(file_list) % running through the folder

@@ -23,8 +23,9 @@ M = my_im2col(mask, neib);
 [n,m] = size(I);
 % Construct your dictionary
 % If you load your own dictionary U calculated offline you don't have to 
-% add anything here
-U = haarTrans(neib*neib);
+% add anything here 
+U = overDCTdict(neib*neib,neib*neib);   
+
 % Do the sparse coding with modified Matching Pursuit
 Z = sparseCoding(U, X, M, sigma, rc_min);
  
