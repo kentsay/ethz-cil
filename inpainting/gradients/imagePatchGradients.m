@@ -20,11 +20,11 @@ function [ gradients, weights ] = imagePatchGradients( I, patch_size )
             d = d / (1 + v + h);
             direction = 90 * (h + 1) / (h + v + 1);
             if d > 0.6
-                direction = direction + (d * 90);
+                direction = 90*d + direction;
             else
                 direction = 90 - direction;
             end
-            
+            direction = direction - 90;
             % Store in gradients
             gradients(i, j) = direction;
             weights(i, j) = v + h;
