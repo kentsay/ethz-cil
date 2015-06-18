@@ -1,7 +1,7 @@
 %% Script to create plots including different algorithms. The user defines all the subfolders needed for the plot. This script is based on the EvaluateInpainting.m provided in the course.
 
 
-dirs = {'diffusion_diamond','diffusion_guass','svd','gradients'};
+dirs = {'gradients'};
 rand_mask_dir = {'rand_masks'};
 text_mask_dir = {'text_mask'};
 
