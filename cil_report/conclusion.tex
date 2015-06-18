@@ -1,5 +1,11 @@
 \section{Conclusion}
 \label{sec:conclusion}
 
-In this paper we presented the directional diffusion algorithm for the inpainting problem. The algorithm is an extension to the regular diffusion algorithm. 
+In this paper we presented the directional diffusion algorithm for the inpainting problem. The algorithm is an extension to the regular diffusion algorithm. The algorithm outperforms regular diffusion when applied to text masks.
+
+Directional diffusion uses the idea of diffusing along the edges of image patches by determining the directionality of an image patch and modifying the kernel appropriately.
+
+The main drawback of the directional diffusion algorithm is its runtime. The small increase in performance is typically not worth the large increase in runtime. However, due to the nature of the algorithm, it is very easy to parallelize. By applying the patch-dependent kernels $K_\theta$ on all patches simultaneously we can achieve great speed-ups.
+
+Additionally, the heuristic used to infer the directionality $\theta$ is not perfect and can be improved. One could use the sobel operator to compute gradients of an image patch \cite{sobel2014history}. Based on these gradients it might be possible to get a more robust estimate of the directionality $\theta$ of the image patches. 
 
