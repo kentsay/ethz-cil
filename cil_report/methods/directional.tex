@@ -20,8 +20,8 @@ M^{(x, y)}_{i, j} &= M_{(i + x) \text{ mod } n, (j + y)\text{ mod } m}
 \end{flalign*}
 Using this shift operator, we compute two basic metrics on the image patch:
 \begin{flalign*}
-v &= \sum_i \sum_j | P_{i,j} - P_{i,j}^{(1, 0)} | \\
-h &= \sum_i \sum_j | P_{i,j} - P_{i,j}^{(0, 1)} | 
+v &= \sum_{i, j}  | P_{i,j} - P_{i,j}^{(1, 0)} | \\
+h &= \sum_{i, j} | P_{i,j} - P_{i,j}^{(0, 1)} | 
 \end{flalign*}
 The first metric $v$ checks how much each pixel differs from the one left of it and provides large values for images with a lot of vertical stripes. The second metric $h$ does the same but checks how much each pixel differs from the one below it. This gives large values for images with a lot of horizontal stripes.
 
@@ -32,7 +32,7 @@ By comparing $h$ and $v$ we can determine if the contents of the image patch wil
 
 A problem with this approach is that it only gives an angle from 0$\degree$ to 90$\degree$. It cannot infer if the diagonal lines on the image patch are left-slanted or right-slanted since these will have $h \approx v$. To help resolve this we propose a heuristic for the diagonal slant by computing $d$, which checks how much each pixel differs from the one diagonally left-below it. This gives large values for images with left-slanted diagonal lines but small values for images with right-slanted diagonal lines. We wish to normalize this value by dividing it by $v+h$, so it ranges from 0 to 1. We add 1 to both sides to prevent division by zero:
 \begin{flalign*}
-d &= \frac{1 + \sum_i \sum_j | P_{i,j} - P_{i,j}^{(1, 1)} |}{1 + v + h}
+d &= \frac{1 + \sum_{i, j} | P_{i,j} - P_{i,j}^{(1, 1)} |}{1 + v + h}
 \end{flalign*}
 
 If this value $d$ is close to 1, we can assume the image is left-slanted. If it is close to 0, we can assume the image is right-slanted. A value close to 0.5 indicates that the image patch has both left and right slanted lines. We can now compute the angle $\theta$ with the additional parameter $d$ using the following heuristic:
