@@ -1,6 +1,6 @@
 function I_rec = inPainting(I, mask)
 
-% Perform the actual inpainting of the image by using difussion
+% Perform the actual inpainting of the image by using directional diffusion
 
 % INPUT
 % I: (n x n) masked image
@@ -32,12 +32,7 @@ patch_size = 32;
 
 %% Compute kernels based on gradients
 %  This computes kernels that are rotated according to the patch gradients
-%arrow = eye(patch_size); arrow = imfilter(arrow, [1 1 1; 1 1 1; 1 1 1]);
-%figure;
-%imshow(I_rec);
-%hold on;
 K_rotate = zeros(3, 3, size(gradients,1), size(gradients,2));
-
 for x = 1:patch_size:size(I_rec,1)
     for y = 1:patch_size:size(I_rec,2)
         i = 1 + (x - 1) / patch_size;
@@ -46,23 +41,18 @@ for x = 1:patch_size:size(I_rec,1)
         % Construct directional kernel for this patch
         K_patch = eye(3) * 8 + ones(3);
         K_patch(2,2) = 0;
-        %arrow_r = zeros(patch_size);
+        
+        % Only apply rotation to patches with significant weight
         if weights(i,j) < 0.03
             gradients(i,j) = 90;
             K_patch = [0 1 0; 1 0 1; 0 1 0] * 1/4;
         else
             K_patch = imrotate(K_patch, gradients(i,j) + 45, 'bicubic', 'crop');
-            %arrow_r = imrotate(arrow, gradients(i,j) + 45, 'bicubic', 'crop');
         end
         
         % Normalize kernel and store it
         K_patch = K_patch ./ sum(sum(K_patch));
         K_rotate(:, :, i, j) = K_patch;
-        
-        % Draw arrow
-        %arrow_final = arrow_r; %cat(3, 0.1 * ones(size(arrow_r)), arrow_r, 0.1 * ones(size(arrow_r)));
-        %h = imagesc([y y+patch_size], [x x+patch_size], arrow_final);
-        %set(h, 'AlphaData', 0.5 * weights(i,j));
     end
 end
 
@@ -88,7 +78,4 @@ while t > 0
         end
     end
 end
-
-%figure;
-%imshow(I_rec);
 

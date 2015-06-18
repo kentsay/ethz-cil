@@ -55,7 +55,7 @@ function [] = illustrations()
         I_est = inPainting(I, mask);
         
         % Compute image patch directionality
-        cd('../gradients');
+        cd('../diffusion_directionality');
         [directions, weights] = imagePatchGradients(I_est, patch_size);
         
         % Plot the patches as white lines
