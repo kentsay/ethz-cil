@@ -39,8 +39,8 @@ legend('DCT', ...
        'Diffusion gaussion', ...
        'Directional diffusion');
 title('Mean squared error rate');
-xlabel('Percentage of mask');
-ylabel('Mean squared error(MSE)');
+xlabel('Percentage of missing pixels');
+ylabel('Mean squared error (MSE)');
 
 % Plot mse with text mask
 fig_mse_txt = figure;
@@ -61,7 +61,7 @@ set(gca,'XTickLabel',{ ...
 
 title('Mean squared error rate');
 % xlabel('Percentage of mask');
-ylabel('Mean squared error(MSE)');
+ylabel('Mean squared error (MSE)');
 
 figure
 hold on;
@@ -101,8 +101,8 @@ legend('DCT', ...
        'Diffusion gaussion', ...
        'Directional diffusion');
 title('Runtime');
-xlabel('Percentage of mask');
-ylabel('Runtime(sec)');
+xlabel('Percentage of missing pixels');
+ylabel('Runtime (sec)');
 
 % Plot runtime with text mask
 fig_time_txt = figure;
