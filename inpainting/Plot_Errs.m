@@ -1,9 +1,9 @@
 %% Script to create plots including different algorithms. The user defines all the subfolders needed for the plot. This script is based on the EvaluateInpainting.m provided in the course.
 
 
-dirs = {'baseline'};
+dirs = {'baseline_haar'};
 
-mask = imread('mask/mask.png');
+%mask = imread('mask/mask.png');
 
 for curr_dir_number = 1:length(dirs)
      disp([curr_dir_number]);
@@ -12,7 +12,7 @@ for curr_dir_number = 1:length(dirs)
 
     Errors = []; % mean squared errors for each image would be stored here
     Times = [];
-    n_it = 1;
+    n_it = 9;
     miss_interval = linspace(0.1,0.9,n_it);
     Result_Mean = zeros(1,n_it);
     Result_Std = zeros(1,n_it);
@@ -21,7 +21,7 @@ for curr_dir_number = 1:length(dirs)
     for j=1:n_it
         k = 1;
         disp(['iteration: ' num2str(j)]);
-        %mask = random_mask(512,miss_interval(j));
+        mask = random_mask(512,miss_interval(j));
         for i = 3:length(file_list) % running through the folder
             disp(['Pic: ' num2str(i)]);
             tic;
