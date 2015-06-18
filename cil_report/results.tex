@@ -28,6 +28,10 @@ We compare algorithms based on two criteria: the mean-squared error of the origi
 	\end{subfigure}
 \end{figure*}
 
+From figure \ref{fig:err_random} we see that the regular diffusion algorithm with the $K_{\text{diamond}}$ kernel works best on a mask of randomly missing pixels. This phenomenon can be explained by the fact that this algorithm diffuses nearby pixels into the missing regions. On average the randomly missing pixels will have some pixels in its direct or near neighborhood that can be used to infer the pixel value.
+
+Figure \ref{fig:err_text} shows the mean squared error of the algorithms on a fixed mask, namely a piece of text. In this case, the missing pixels have some structure to them and form larger areas of missing pixels. In that case, the directional diffusion algorithm performs best. As the size of the regions of missing pixels gets larger, the regular diffusion algorithm has less nearby pixels to work with. Any high-contrasting edges of the underlying image are not properly extended into the unknown regions. The directional diffusion algorithms helps resolve this by aligning the kernel  $K_{\theta}$ with the general directionality of the image patch. This attempts to propagate high-contrast edges of the image into the unknown regions.
+
 
 \begin{figure}
 		
