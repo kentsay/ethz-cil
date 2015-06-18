@@ -17,7 +17,7 @@ function [U,Z] = dictionary_learning(X)
 
 %% Parameters
 [d,n] = size(X);
-l = 256;
+l = 512;
 sigma = 0.01;
 rc_min = 0.01;
 iter_num = 50;
