@@ -1,4 +1,4 @@
-function I_rec = inPainting(I, mask)
+ifunction I_rec = inPainting(I, mask)
 
 % Perform the actual inpainting of the image by using difussion
 
