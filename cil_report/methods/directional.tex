@@ -30,7 +30,7 @@ Regular diffusion will present noticeable artifacts. These typically occur at hi
 \subsubsection{Divide image into $n \times n$ patches}
 The directionality of the contents of an image is typically a local property. Hence we want to know what the directionality of a small image patch is. An image $I$ can be broken down into patches of size $n \times n$. We define a patch $P$ starting at pixel location $i,j$ as:
 \begin{flalign*}
-P_{i,j} = \begin{bmatrix}
+P = \begin{bmatrix}
 I_{i,j} & I_{i+1, j} & \hdots & I_{i+n, j}\\
 I_{i,j+1} & I_{i+1, j+1} & \hdots & I_{i+n, j+1}\\
 \vdots & \vdots & \ddots & \vdots \\
