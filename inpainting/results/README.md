@@ -1,12 +1,8 @@
 # Plotting
 
-Matlab scripts for plotting inpainting experiment results. We mainly focus on plotting two numbers: Mean squred error and runtime in second. The script generate six figures listed as follow:
+This folder contains the results from our experiments and a script for generating the plots. We mainly focus on plotting two metrics: Mean squared error and runtime in seconds. The script generates two figures:
 
-1. Line plot: Mean squared error with random mask under log scale
-2. Bar chart: Mean squared error with text mask
-3. Box plot: Mean squared error standard deviation with random mask
-4. Line plot: Runtime with random mask under log scale
-5. Bar chart: Runtime with text mask
-6. Box plot: Runtime standard deviation with random mask
+1. Mean squared error with random masks as a line plot with a log scale for the y-axis.
+2. Runtime with random masks as a line plot with a log scale for the y-axis.
 
-The script is divided into three parts: load data from file, plots for mean squred error, plots for runtime. If you want to reproduce our plotting, just simple execute the plots.m script. You can also modify the file name if you want to plot your own data.
+The script is divided into three parts: load data from file, plot the mean squared error and plot the runtime. If you want to reproduce the plots, execute the `plots.m` script.
