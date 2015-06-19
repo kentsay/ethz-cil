@@ -63,15 +63,8 @@ title('Mean squared error rate');
 % xlabel('Percentage of mask');
 ylabel('Mean squared error (MSE)');
 
-figure
-hold on;
-errorbar(x, svd_rmd.Result_Mean, svd_rmd.Result_Std);
-errorbar(x, df_dia_rmd.Result_Mean, df_dia_rmd.Result_Std);
-errorbar(x, df_gau_rmd.Result_Mean, df_gau_rmd.Result_Std);
-errorbar(x, gd_rmd.Result_Mean, gd_rmd.Result_Std);
-
 % Boxplot mse std with random mask
-fig_mse_rmd_std = figure;
+fig_mse_rmd_std = figure;   
 boxplot([svd_rmd.Result_Mean', ...
          dct_rmd.Result_Mean', ...
          haar_rmd.Result_Mean', ...
