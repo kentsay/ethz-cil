@@ -55,8 +55,12 @@ function [] = illustrations()
         I_est = inPainting(I, mask);
         
         % Compute image patch directionality
-        cd('../diffusion_directionality');
-        [directions, weights] = imagePatchGradients(I_est, patch_size);
+        cd('../diffusion_directional');
+        directions = blockproc(I_est, [patch_size patch_size], ...
+            @(P) computeDirectionality(P), ...
+            'BorderSize', [1 1], ...
+            'PadMethod', 'replicate', ...
+            'TrimBorder', false);
         
         % Plot the patches as white lines
         figure;
@@ -69,7 +73,7 @@ function [] = illustrations()
                 line = eye(patch_size); line = imfilter(line, [1 1 1; 1 1 1; 1 1 1]);
                 line = imrotate(line, directions(i,j) + 45, 'bicubic', 'crop');
                 h = imagesc([y y+patch_size], [x x+patch_size], line);
-                set(h, 'AlphaData', 0.5 * weights(i,j));
+                set(h, 'AlphaData', 0.2);
             end
         end
         hold off;

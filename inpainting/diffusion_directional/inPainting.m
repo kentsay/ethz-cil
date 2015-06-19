@@ -25,57 +25,36 @@ while norm(abs(I_rec - I_old), 'fro') > threshold
     [I_old, I_rec] = diffuse(I_rec, mask, I, K);
 end
 
-%% Compute gradients of image patches
-%  With this we know the directionality of patches in images
+%% Compute directionality of all image patches
 patch_size = 32;
-[gradients, weights] = imagePatchGradients(I_rec, patch_size);
+patch_directionality = blockproc(I_rec, [patch_size patch_size], ...
+    @(P) computeDirectionality(P), ...
+    'BorderSize', [1 1], ...
+    'PadMethod', 'replicate', ...
+    'TrimBorder', false);
 
-%% Compute kernels based on gradients
-%  This computes kernels that are rotated according to the patch gradients
-K_rotate = zeros(3, 3, size(gradients,1), size(gradients,2));
-for x = 1:patch_size:size(I_rec,1)
-    for y = 1:patch_size:size(I_rec,2)
-        i = 1 + (x - 1) / patch_size;
-        j = 1 + (y - 1) / patch_size;
-        
-        % Construct directional kernel for this patch
-        K_patch = eye(3) * 8 + ones(3);
-        K_patch(2,2) = 0;
-        
-        % Only apply rotation to patches with significant weight
-        if weights(i,j) < 0.03
-            gradients(i,j) = 90;
-            K_patch = [0 1 0; 1 0 1; 0 1 0] * 1/4;
-        else
-            K_patch = imrotate(K_patch, gradients(i,j) + 45, 'bicubic', 'crop');
-        end
-        
-        % Normalize kernel and store it
-        K_patch = K_patch ./ sum(sum(K_patch));
-        K_rotate(:, :, i, j) = K_patch;
+%% Compute per-patch kernels based on directionality
+K_diag = eye(3) * 8 + ones(3);
+K_diag(2,2) = 0;
+K_diag = K_diag / sum(sum(K_diag));
+kernels = zeros(size(patch_directionality, 1), size(patch_directionality, 2), 3, 3);
+for i = 1:size(I_rec, 1)/patch_size
+    for j = 1:size(I_rec, 2)/patch_size
+        K_rotated = imrotate(K_diag, patch_directionality(j, i) + 45, 'bicubic', 'crop');
+        K_rotated = K_rotated / sum(sum(K_rotated));
+        kernels(i, j, :, :) = K_rotated;
     end
 end
 
 %% Apply per-patch kernels
 %  Apply the directional kernels to the image
-t = 10;
+t = 15;
 while t > 0
     t = t - 1;
-    for i = 1:floor(size(I_rec) / patch_size)
-        for j = 1:floor(size(I_rec) / patch_size)
-            x = 1 + (i - 1) * patch_size;
-            y = 1 + (j - 1) * patch_size;   
-
-            % Get kernel
-            K_patch = K_rotate(:, :, i, j);
-            region = zeros(size(I_rec));
-            region(x:x+patch_size-1, y:y+patch_size-1) = 1.0;
-
-            % Apply filter
-            I_patch = imfilter(I_rec, K_patch, 'replicate');
-            I_rec = (double(region==0) .* I_rec) + (double(region~=0) .* I_patch);
-            I_rec = (double(mask==0) .* I_rec) + (double(mask~=0) .* I);
-        end
-    end
+    I_rec = blockproc(I_rec, [patch_size patch_size], ...
+        @(P) localDiffuse(P, kernels, patch_size), ...
+        'BorderSize', [1 1], ...
+        'PadMethod', 'replicate');
+    I_rec = (double(mask==0) .* I_rec) + (double(mask~=0) .* I);
 end
 
