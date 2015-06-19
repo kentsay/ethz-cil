@@ -57,7 +57,7 @@ By comparing $h$ and $v$ we can determine if the contents of the image patch wil
 \theta_1 &= 90 \frac{h + 1}{h + v + 1}
 \end{flalign*}
 
-A problem with this approach is that it only gives an angle from 0$\degree$ to 90$\degree$. It cannot infer if the diagonal lines on the image patch are left-slanted or right-slanted since these will have $h \approx v$. To help resolve this we propose a heuristic for the diagonal slant by computing $d$, which checks how much each pixel differs from the one diagonally right-below it. This gives large values for images with right-slanted diagonal lines but small values for images with left-slanted diagonal lines. We wish to normalize this value by dividing it by $v+h$, so it ranges from 0 to 1. We add 1 to both sides to prevent division by zero:
+This approach only gives an angle from 0$\degree$ to 90$\degree$. It cannot infer if the diagonal lines on the image patch are left-slanted or right-slanted since these will have $h \approx v$. To help resolve this we propose a heuristic for the diagonal slant by computing $d$, which checks how much each pixel differs from the one diagonally right-below it. This gives large values for images with right-slanted diagonal lines but small values for images with left-slanted diagonal lines. We wish to normalize this value by dividing it by $v+h$, so it ranges from 0 to 1. We add 1 to both sides to prevent division by zero:
 \begin{flalign*}
 d &= \frac{1 + \sum_{i, j} | P_{i,j} - P_{i,j}^{(1, 1)} |}{1 + v + h}
 \end{flalign*}
