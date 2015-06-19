@@ -85,9 +85,9 @@ function [] = illustrations()
     I_claudia_rec = I_claudia .* M;
     I_tom_rec = I_tom .* M;
     
-    plotDirectionality(I_spiral_rec, M, 32);
-    plotDirectionality(I_claudia_rec, M, 32);
-    plotDirectionality(I_tom_rec, M, 32);
+    plotDirectionality(I_spiral_rec, M, 16);
+    plotDirectionality(I_claudia_rec, M, 16);
+    plotDirectionality(I_tom_rec, M, 16);
 
 end
 
