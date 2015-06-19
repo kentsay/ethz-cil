@@ -1,7 +1,7 @@
 \section{Conclusion}
 \label{sec:conclusion}
 
-In this paper we presented the directional diffusion algorithm for the inpainting problem. The algorithm is an extension to the regular diffusion algorithm. The algorithm outperforms regular diffusion when applied to text masks.
+In this paper we presented the directional diffusion algorithm for the inpainting problem. It is an extension to the regular diffusion algorithm. Directional diffusion outperforms regular diffusion when applied to text masks.
 
 The main drawback of the directional diffusion algorithm is its runtime. The small increase in performance is typically not worth the large increase in runtime. However, due to the nature of the algorithm, it is very easy to parallelize. By applying the patch-dependent kernels $K_\theta$ on all patches simultaneously we can achieve great speed-ups.
 
