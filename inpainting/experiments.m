@@ -3,8 +3,7 @@
 %  experiments. This script is based on the EvaluateInpainting.m provided
 %  in the course.
 
-dirs = {'baseline_dct', 'baseline_haar', 'dictionary_learning', 'svd',  ...
-        'diffusion_diamond', 'diffusion_directional', 'diffusion_gauss', };
+dirs = {'diffusion_directional'};
 rand_mask_dir = {'rand_masks'};
 text_mask_dir = {'text_mask'};
 
@@ -14,7 +13,7 @@ for curr_dir_number = 1:length(dirs)
     file_list = dir('data'); 
     
     % Get all the indices of the mask pictures in the respecitve folder
-    mask_file_list = dir('mask/rand_masks');
+    mask_file_list = dir('mask/text_mask');
     n_it = [];
     for i=1:length(mask_file_list)
         mask_name = mask_file_list(i).name;
@@ -74,7 +73,7 @@ for curr_dir_number = 1:length(dirs)
         Time_Std(j) = std(Times);
     end
     name = strcat(curr_dir,'.mat');
-    save(name,'Result_Mean','Result_Std','Time_Mean','Time_Std','miss_interval');
+    save(name,'Result_Mean','Result_Std','Time_Mean','Time_Std');
 end
 
 
