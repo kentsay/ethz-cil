@@ -3,7 +3,8 @@
 %  experiments. This script is based on the EvaluateInpainting.m provided
 %  in the course.
 
-dirs = {'diffusion_directional'};
+dirs = {'baseline_dct', 'baseline_haar', 'dictionary_learning', 'svd',  ...
+        'diffusion_diamond', 'diffusion_directional' };
 rand_mask_dir = {'rand_masks'};
 text_mask_dir = {'text_mask'};
 
