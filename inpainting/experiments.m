@@ -13,7 +13,7 @@ for curr_dir_number = 1:length(dirs)
     file_list = dir('data'); 
     
     % Get all the indices of the mask pictures in the respecitve folder
-    mask_file_list = dir('mask/rand_masks');
+    mask_file_list = dir('mask/text_mask');
     n_it = [];
     for i=1:length(mask_file_list)
         mask_name = mask_file_list(i).name;
