@@ -21,5 +21,3 @@ for i = 1:im_size/patch
 end
 
 % It will only work for orthogonal matrices and exact patches coverage
-
-% TO BE FILLED

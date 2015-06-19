@@ -30,7 +30,6 @@ for nn = 1:n
     % account the known observations defined by the mask M
     % Initialize z to zero
    
-    % TO BE FILLED
     Mu = MM*U;
     col_norm_m = sqrt(sum(Mu.^2,1));
     rc_max = max(abs(Mu'*r));

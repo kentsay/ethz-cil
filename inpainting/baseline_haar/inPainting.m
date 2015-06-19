@@ -43,6 +43,3 @@ end
 X_hat(X_hat<0)=0;
 I_rec = my_col2im(X_hat,neib,n);
 
-%X_t = M.*X + (I - M).*(U*Z);
-%I_rec = my_col2im(X_t,neib,n);
-% TO BE FILLED

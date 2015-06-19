@@ -30,5 +30,3 @@ for i = 1:nrow_patch
         counter = counter + 1;
     end
 end
-
-% TO BE FILLED
