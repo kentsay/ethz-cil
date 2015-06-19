@@ -11,11 +11,10 @@ We tested our methods on seventeen different $512\times 512$ gray scale images u
 	\item Directional diffusion with patches of size $32 \times 32$.
 \end{enumerate}
 
- To test the performance of the algorithm, we consider a variety of masks:
+ To test the performance of the algorithm, we consider two types of masks:
 \begin{enumerate}
 	\item Nine different masks of randomly missing pixels distributed uniformly. These range from 10\% to 90\% missing pixels. This type of mask has many small missing regions.
 	\item A mask represented by a sample of text. This type of mask has many medium-sized missing regions.
-	\item A mask with large obfuscations such as squares and circles. This type of mask has a few large-sized missing regions.
 \end{enumerate}
 
 We have set up the experiments as follows: We take the original image $I$ and a mask $M$. We construct a damaged image $I_{\text{damaged}}$ based on $I$ but with the pixels indicated by the mask $M$ set to the fixed value 0. We run the relevant inpainting algorithms by providing it with both the damaged image and the mask. The algorithm will return a recovered image $I^{\text{rec}}$, which we can compare to the original image $I$.
