@@ -1,6 +1,8 @@
 \subsection{Directional diffusion}
 
-Regular diffusion will present noticeable artifacts. These typically occur at high-contrast edges of the image. Because the diffusion kernel equally weighs pixels from all directions it creates a blur effect and is unable to properly propogate edges into the unknown regions. This effect can be seen in figure \ref{fig:stepbystepcross}. To help resolve this problem we use directional kernels that weigh pixels from certain directions more heavily. To do this we first apply the regular diffusion algorithm to the image to get an estimate of the original image. Then we divide the image into separate patches. For each patch we infer the general directionality by using a heuristic. Based on this directionality we construct a directional kernel. Finally we apply this kernel to do the inpainting for that specific patch. By inferring the correct directionality, the artifacts can be noticeably reduced as seen in figure \ref{fig:stepbystepdir}. We will now explain these steps in more detail.
+Regular diffusion will present noticeable artifacts. These typically occur at high-contrast edges of the image. Because the diffusion kernel equally weighs pixels from all directions it creates a blur effect and is unable to properly propogate edges into the unknown regions. This effect can be seen in figure \ref{fig:stepbystepcross}. To help resolve this problem we use directional kernels that weigh pixels from certain directions more heavily. We define directionality to be the angle in which the high-contrast edges of an image are directed. An image with mostly horizontal lines will have a directionality of $0$ degrees whereas an image with mostly vertical lines will have a directionality of $90$ degrees. By inferring the correct directionality, the artifacts can be noticeably reduced as seen in figure \ref{fig:stepbystepdir}.
+
+To do this we first apply the regular diffusion algorithm to the image to get an estimate of the original image. Then we divide the image into separate patches. For each patch we infer the general directionality by using a heuristic. Based on this directionality we construct a directional kernel. Finally we apply this kernel to do the inpainting for that specific patch. We will now explain these steps in more detail.
 
 \begin{figure*}
 	\centering
@@ -55,7 +57,7 @@ By comparing $h$ and $v$ we can determine if the contents of the image patch wil
 \theta_1 &= 90 \frac{h + 1}{h + v + 1}
 \end{flalign*}
 
-A problem with this approach is that it only gives an angle from 0$\degree$ to 90$\degree$. It cannot infer if the diagonal lines on the image patch are left-slanted or right-slanted since these will have $h \approx v$. To help resolve this we propose a heuristic for the diagonal slant by computing $d$, which checks how much each pixel differs from the one diagonally right-below it. This gives large values for images with right-slanted diagonal lines but small values for images with left-slanted diagonal lines. We wish to normalize this value by dividing it by $v+h$, so it ranges from 0 to 1. We add 1 to both sides to prevent division by zero:
+This approach only gives an angle from 0$\degree$ to 90$\degree$. It cannot infer if the diagonal lines on the image patch are left-slanted or right-slanted since these will have $h \approx v$. To help resolve this we propose a heuristic for the diagonal slant by computing $d$, which checks how much each pixel differs from the one diagonally right-below it. This gives large values for images with right-slanted diagonal lines but small values for images with left-slanted diagonal lines. We wish to normalize this value by dividing it by $v+h$, so it ranges from 0 to 1. We add 1 to both sides to prevent division by zero:
 \begin{flalign*}
 d &= \frac{1 + \sum_{i, j} | P_{i,j} - P_{i,j}^{(1, 1)} |}{1 + v + h}
 \end{flalign*}
@@ -68,7 +70,7 @@ If this value $d$ is close to 1, we can assume the image is right-slanted. If it
 \end{cases}
 \end{flalign*}
 
-In figure \ref{fig:directionality} we show the angle $\theta$, which has been computed on image patches of size $32 \times 32$, as white lines. The heuristic works well on image patches where the contents is simple and consists of mostly straight lines. When the contents of an image patch gets more complex, inferring the angle becomes more difficult and the heuristic fails.
+In figure \ref{fig:directionality} we show the angle $\theta$, which has been computed on image patches of size $16 \times 16$, as white lines. The heuristic works well on image patches where the contents is simple and consists of mostly straight lines. When the contents of an image patch gets more complex, inferring the angle becomes more difficult and the heuristic fails.
 
 \subsubsection{Constructing a directional kernel}
 After computing the angle $\theta$ for an image patch, we wish to construct a directional kernel $K_\theta$, which puts more weight on pixels that align with the angle $\theta$. We start with a diagonal kernel $K_{\text{diag}}$ (see figure \ref{fig:kernels}). This kernel is converted to a $3\times 3$ image which is rotated by $\theta+45$ degrees (because the initial kernel was diagonal, we add 45 degrees) and cropped to obtain a new $3\times 3$ image representing the rotated kernel. During the rotation process, bicubic interpolation is used to smooth the intermediate values. The resulting image is converted back to a $3 \times 3$ matrix representing the kernel $K_\theta$.
