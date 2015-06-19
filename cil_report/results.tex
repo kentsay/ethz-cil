@@ -7,6 +7,7 @@ We tested our methods on seventeen different $512\times 512$ gray scale images u
 	\item Sparse-coding with a Haar wavelet \cite{cilhaar}.
 	\item Singular Value Decomposition \cite{cilsvd}.
 	\item Regular diffusion with a $K_{\text{diamond}}$ kernel.
+	\item Directional diffusion with patches of size $16 \times 16$.
 	\item Directional diffusion with patches of size $32 \times 32$.
 \end{enumerate}
 
@@ -24,9 +25,7 @@ We compare the algorithms based on two criteria: the mean-squared error and the 
 \end{flalign*}
 
 
-The mean squared error of the algorithms for the randomly generated masks are displayed in figure \ref{fig:err_random} and the runtime is displayed in figure \ref{fig:runtime}.
-
-The mean squared error and runtime of the algorithms for the text mask is given in table \ref{tbl:err_text}.
+The mean squared error of the algorithms for the randomly generated masks are displayed in figure \ref{fig:err_random} and the runtime is displayed in figure \ref{fig:runtime}. The mean squared error and runtime of the algorithms for the text mask is given in table \ref{tbl:err_text}.
 
 
 
